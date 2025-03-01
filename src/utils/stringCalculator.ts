@@ -1,23 +1,25 @@
 export function add(numbers: string): number {
   if (!numbers) return 0;
 
-  let delimiter = /,|\n/;
+  let delimiter = /,|\n/; // Default delimiters (comma or newline)
   let numString = numbers;
 
-  // Check for custom delimiter
-  if (numbers.startsWith("//")) {
-    const parts = numbers.split("\n");
-    delimiter = new RegExp(parts[0].slice(2));
-    numString = parts.slice(1).join("\n"); 
+  // Check for custom delimiter syntax: "//[delimiter]\n[numbers...]"
+  const delimiterMatch = numbers.match(/^\/\/(.+)\n(.*)/);
+  if (delimiterMatch) {
+    delimiter = new RegExp(delimiterMatch[1]); // Extract delimiter dynamically
+    numString = delimiterMatch[2]; // Extract numbers part
   }
 
+  // Convert string to number array
   const numArray = numString.split(delimiter).map(Number);
 
-  // Validate negative numbers
+  // Handle negative numbers
   const negatives = numArray.filter(num => num < 0);
   if (negatives.length) {
-    throw new Error(`negative numbers not allowed ${negatives.join(", ")}`);
+    throw new Error(`negative numbers not allowed ${negatives.join(', ')}`);
   }
 
+  // Return sum
   return numArray.reduce((sum, num) => sum + num, 0);
 }

@@ -4,38 +4,51 @@ import Result from "./Result";
 
 export default function Calculator() {
   const [input, setInput] = useState("");
-  const [result, setResult] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleCalculate = () => {
     try {
       setError(null);
-      setResult(add(input));
+      const calculationResult = add(input);
+      setInput(calculationResult.toString());
     } catch (err) {
       setError((err as Error).message);
-      setResult(null);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-      <div className="bg-white shadow-lg rounded-lg p-6 w-full max-w-md text-center">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4">String Calculator</h1>
+    <div className="flex items-center justify-center h-screen bg-gradient-to-br from-gray-900 to-black p-6">
+      <div className="bg-gray-900 text-white p-8 rounded-2xl shadow-2xl w-full max-w-md border-4 border-gray-700">
         <input 
-          type="text" 
-          value={input} 
-          onChange={(e) => setInput(e.target.value)} 
-          placeholder="Enter numbers (e.g., 1,2,3)"
-          className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          type="text"
+          value={input}
+          readOnly
+          className="w-full bg-gray-800 text-right p-6 rounded-md mb-6 text-4xl font-mono shadow-inner border border-gray-600 focus:outline-none tracking-wide"
         />
-        <button 
-          onClick={handleCalculate} 
-          className="mt-4 w-full bg-blue-500 text-white p-2 rounded-lg hover:bg-blue-600 transition duration-300"
-        >
-          Calculate
-        </button>
-        {error && <p className="mt-2 text-red-500 font-semibold">{error}</p>}
-        <Result result={result} />
+        <div className="grid grid-cols-4 gap-3">
+          {["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", ",", "\n"].map((char) => (
+            <button
+              key={char}
+              onClick={() => setInput(input + char)}
+              className="bg-gray-700 text-white p-6 rounded-xl text-2xl font-semibold hover:bg-gray-600 transition-transform transform active:scale-95 shadow-lg"
+            >
+              {char === "\n" ? "↵" : char}
+            </button>
+          ))}
+          <button
+            onClick={handleCalculate}
+            className="col-span-2 bg-green-500 text-white p-6 rounded-xl text-2xl font-semibold hover:bg-green-600 transition-transform transform active:scale-95 shadow-lg"
+          >
+            ➡
+          </button>
+          <button
+            onClick={() => setInput("")}
+            className="col-span-2 bg-red-500 text-white p-6 rounded-xl text-2xl font-semibold hover:bg-red-600 transition-transform transform active:scale-95 shadow-lg"
+          >
+            ⌫
+          </button>
+        </div>
+        {error && <p className="mt-4 text-red-400 font-semibold animate-pulse text-lg text-center">{error}</p>}
       </div>
     </div>
   );
