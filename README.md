@@ -3,7 +3,7 @@
 A **React + TypeScript** application implementing a **String Calculator** using **Test-Driven Development (TDD)**.
 
 ## 🚀 Live Demo
-🔗 [View Live on Netlify]
+🔗 [View Live on Netlify](https://incubyte-calci.netlify.app/)
 
 ## 📌 Features
 ✅ Implements TDD (Test-Driven Development)  
