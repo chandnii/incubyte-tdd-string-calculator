@@ -1,22 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { add } from "../utils/stringCalculator";
 
 export default function Calculator() {
   const [input, setInput] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  const handleCalculate = () => {
+  const handleCalculate = useCallback(() => {
     try {
       setError(null);
-      console.log("Input before calculation:", input);
       const calculationResult = add(input);
-      console.log("Calculation Result:", calculationResult);
       setInput(calculationResult.toString());
     } catch (err) {
-      console.error("Error in calculation:", err);
       setError((err as Error).message);
     }
-  };
+  }, [input]);
   
 
   useEffect(() => {
@@ -35,7 +32,7 @@ export default function Calculator() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [handleCalculate]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 overflow-hidden fixed inset-0">
